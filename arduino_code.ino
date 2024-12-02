@@ -1,29 +1,39 @@
 char a = '0';
+
 void setup()
 {
     pinMode(2, OUTPUT); // cleaner on or off
     pinMode(4, OUTPUT); // dustbin open or close
-    pinMode(23, INPUT); // ir sensor input
+    pinMode(5, INPUT);  // ir sensor input
     Serial.begin(9600);
 }
+
 void loop()
 {
-    digitalWrite(2, LOW);
-    Serial.println("Seated");
-    delay(10000);
-    if (digitalRead(23) == LOW)
+    int irState = digitalRead(5);
+
+    if (irState == HIGH)
     {
-        digitalWrite(2, LOW);
-        a = '1';
-        Serial.println(a);
-        loop();
+        Serial.println("No person detected");
+        delay(1000);
+        if (a == '1')
+        {
+            // Customer has left, initialize cleaning
+            Serial.println("Initializing cleaning");
+            delay(1000);
+            digitalWrite(2, HIGH);
+            digitalWrite(4, HIGH);
+            a = '0';
+        }
     }
-    if (a == '1' && digitalRead(23) == HIGH)
+    else
     {
-        Serial.println("intilizing cleaning ");
-        digitalWrite(2, HIGH);
-        digitalWrite(4, HIGH);
-        a = '0';
-        Serial.println(a);
+        Serial.println("Person present");
+        delay(1000);
+        if (a == '0')
+        {
+            // Customer has arrived, set flag
+            a = '1';
+        }
     }
 }
