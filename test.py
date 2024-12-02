@@ -6,7 +6,7 @@ ser = serial.Serial('COM7', 9600)  # Replace 'COM3' with the correct port
 time.sleep(2)  # Wait for the connection to establish
 
 # Open a file to log data with UTF-8 encoding
-with open("sensor_data.csv", "w", encoding="utf-8") as f:
+with open("data.csv", "w", encoding="utf-8") as f:
     while True:
         try:
             # Read and decode the data from Arduino
